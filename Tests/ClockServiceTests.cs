@@ -11,7 +11,7 @@ namespace Tests
     public class ClockServiceTests
     {
         [TestMethod]
-        public void TickEvery1s()
+        public void TickEverySecond()
         {
 	        var count = 0;
 	        var threadPool = new TestScheduler();
@@ -42,5 +42,33 @@ namespace Tests
 		        Assert.AreEqual(i+1, count);
 	        }
         }
+
+	    [TestMethod]
+	    public void LongTickEveryNSecond()
+	    {
+		    var count = 0;
+		    var threadPool = new TestScheduler();
+		    var dispatcher = new TestScheduler();
+		    var clock = new ClockService(threadPool);
+		    clock.PollingTick.ObserveOn(dispatcher).Subscribe(_ => count+=1);
+
+		    Assert.AreEqual(0, count); // Initial state
+
+		    // First value is produced immediately
+		    threadPool.AdvanceBy(1); // Produce the first value
+		    Assert.AreEqual(0, count);
+		    dispatcher.AdvanceBy(1); // Consume the first value
+		    Assert.AreEqual(1, count);
+
+		    // A new value is produced in every time interval
+		    for (var i = 1; i < 1000; i++)
+		    {
+			    threadPool.AdvanceBy(TimeSpan.TicksPerSecond*ClockService.PollingInterval);
+			    Assert.AreEqual(i, count);
+			    dispatcher.AdvanceBy(1);
+			    Assert.AreEqual(i+1, count);
+		    }
+	    }
+
     }
 }
