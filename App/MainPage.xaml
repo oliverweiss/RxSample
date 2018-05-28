@@ -1,0 +1,34 @@
+﻿<Page
+    x:Class="App.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:app="using:App"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	<Page.Resources>
+		<Style TargetType="TextBlock">
+			<Setter Property="FontSize" Value="40" />
+			<Setter Property="Foreground" Value="{ThemeResource ApplicationForegroundThemeBrush}"/>
+		</Style>
+	</Page.Resources>
+
+	<StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="20">
+		<StackPanel Orientation="Horizontal">
+			<TextBlock Width="240" Text="Date:" />
+			<TextBlock x:Name="Date" Text="{x:Bind ViewModel.Date, Mode=OneWay}" />
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<TextBlock Width="240" Text="Time: " />
+			<TextBlock x:Name="Time" Text="{x:Bind ViewModel.Time, Mode=OneWay}" />
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<TextBlock Width="240" Text="Error: " />
+			<TextBlock x:Name="Error" Text="{x:Bind ViewModel.Error, Mode=OneWay}" />
+		</StackPanel>
+		<Ellipse Width="240" Height="240" Fill="Green" Visibility="{x:Bind app:Converters.VisibleWhenOk(ViewModel.Status), Mode=OneWay}"/>
+		<Ellipse Width="240" Height="240" Fill="Gray"  Visibility="{x:Bind app:Converters.VisibleWhenUnknown(ViewModel.Status), Mode=OneWay}"/>
+		<Ellipse Width="240" Height="240" Fill="Red"   Visibility="{x:Bind app:Converters.VisibleWhenFail(ViewModel.Status), Mode=OneWay}"/>
+	</StackPanel>
+</Page>
