@@ -25,7 +25,7 @@ namespace Lib
 
 			Tick = now
 				.Concat(ticks)
-				.Select(_ => TimeStamp.Now);
+				.Select(_ => new TimeStamp(threadPool.Now));
 
 			PollingTick = now
 				.Concat(ticks.Buffer(PollingInterval).Select(_ => 0L));
@@ -48,15 +48,15 @@ namespace Lib
 	{
 		private readonly DateTime _instant;
 
-		public TimeStamp(DateTime instant)
+		public TimeStamp(DateTimeOffset instant)
 		{
-			_instant = instant;
+			_instant = instant.LocalDateTime;
 		}
 
 		public string Time => _instant.ToString("HH:mm:ss");
 		public string Date => _instant.ToString("dd.MM.yyyy");
 		public string Error => _instant.ToString("fff");
 
-		public static TimeStamp Now => new TimeStamp(DateTime.Now);
+		public static TimeStamp Now(IScheduler scheduler) => new TimeStamp(scheduler.Now);
 	}
 }
