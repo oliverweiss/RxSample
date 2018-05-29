@@ -38,9 +38,7 @@ namespace Lib
 		/// <returns></returns>
 		public static DateTimeOffset NextSecond(DateTimeOffset now)
 		{
-			return now
-				.AddSeconds(1)
-				.AddTicks(now.Ticks % TimeSpan.TicksPerSecond);
+			return now.AddTicks(TimeSpan.TicksPerSecond - now.Ticks % TimeSpan.TicksPerSecond);
 		}
 	}
 
