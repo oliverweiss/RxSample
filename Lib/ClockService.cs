@@ -54,7 +54,5 @@ namespace Lib
 		public string Time => _instant.ToString("HH:mm:ss");
 		public string Date => _instant.ToString("dd.MM.yyyy");
 		public string Error => _instant.ToString("fff");
-
-		public static TimeStamp Now(IScheduler scheduler) => new TimeStamp(scheduler.Now);
 	}
 }
