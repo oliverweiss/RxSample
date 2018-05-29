@@ -13,3 +13,6 @@ It also features a unit test for the clock service showing how to use test sched
 The clock service ticks every second, and updates the time display.
 
 The clock service has also a longer tick, which is used to simulate a heartbeat polling. At every ticks, the theme is toggled from light to dark, and an async method is called to get the status. The result of the method is then used to set the color of the dot.
+
+
+![App screenshot](screenshot.png "App screenshot")
