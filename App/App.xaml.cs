@@ -6,6 +6,8 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.AppService;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -23,6 +25,10 @@ namespace App
     /// </summary>
     sealed partial class App : Application
     {
+	    public static BackgroundTaskDeferral AppServiceDeferral = null;
+	    public static AppServiceConnection Connection = null;
+	    public static event EventHandler AppServiceConnected;
+
         /// <summary>
         /// Initialise l'objet d'application de singleton.  Il s'agit de la première ligne du code créé
         /// à être exécutée. Elle correspond donc à l'équivalent logique de main() ou WinMain().
@@ -109,5 +115,28 @@ namespace App
             //TODO: enregistrez l'état de l'application et arrêtez toute activité en arrière-plan
             deferral.Complete();
         }
+
+	    protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+	    {
+		    // connection established from the fulltrust process
+		    if (args.TaskInstance.TriggerDetails is AppServiceTriggerDetails)
+		    {
+			    AppServiceDeferral = args.TaskInstance.GetDeferral();
+			    args.TaskInstance.Canceled += OnTaskCanceled;
+
+			    if (args.TaskInstance.TriggerDetails is AppServiceTriggerDetails details)
+			    {
+				    Connection = details.AppServiceConnection;
+				    AppServiceConnected?.Invoke(this, null);
+			    }
+		    }
+	    }
+
+	    private void OnTaskCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
+	    {
+		    AppServiceDeferral?.Complete();
+	    }
+
+
     }
 }
