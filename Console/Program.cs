@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
