@@ -4,12 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Foundation.Metadata;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -86,6 +89,9 @@ namespace App
 	        Services.Clock.PollingTick
 		        .ObserveOn(Services.Dispatcher)
 		        .Subscribe((_) => ToggleTheme());
+
+			// TODO Move it somewhere async. Maybe have a ShellView, and do this in OnNavigatedTo/OnNavigatedFrom 
+	        LaunchConsole();
         }
 
 	    public void ToggleTheme()
@@ -139,6 +145,22 @@ namespace App
 	    {
 		    AppServiceDeferral?.Complete();
 	    }
+
+	    private async Task LaunchConsole()
+	    {
+		    // launch the fulltrust process and for it to connect to the app service            
+		    if (ApiInformation.IsApiContractPresent("Windows.ApplicationModel.FullTrustAppContract", 1, 0))
+		    {
+			    await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
+		    }
+		    else
+		    {
+			    var dialog = new MessageDialog("This feature is only available on Windows 10 Desktop SKU");
+			    await dialog.ShowAsync();
+		    }
+	    }
+
+
 
 
     }

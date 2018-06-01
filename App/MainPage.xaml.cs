@@ -40,20 +40,6 @@ namespace App
 			base.OnNavigatedFrom(e);
 		}
 
-		private async void Do()
-		{
-			// launch the fulltrust process and for it to connect to the app service            
-			if (ApiInformation.IsApiContractPresent("Windows.ApplicationModel.FullTrustAppContract", 1, 0))
-			{
-				await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
-			}
-			else
-			{
-				var dialog = new MessageDialog("This feature is only available on Windows 10 Desktop SKU");
-				await dialog.ShowAsync();
-			}
-
-		}
 
 		private async void MainPage_AppServiceConnected(object sender, EventArgs e)
 		{
