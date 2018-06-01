@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace Lib
 {
@@ -19,7 +20,7 @@ namespace Lib
 					NextSecond(threadPool.Now),
 					TimeSpan.FromSeconds(1),
 					threadPool)
-				.Publish().RefCount(); // Turns it into a Hot observable (starts producing values immediately)
+				.StartImmediately();
 
 			var now = Observable.Return(0L, threadPool);
 

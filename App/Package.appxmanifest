@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" IgnorableNamespaces="uap mp">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
   <Identity Name="3189e422-af2b-45d3-9a03-db5d20e432bf" Publisher="CN=olivi" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="3189e422-af2b-45d3-9a03-db5d20e432bf" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -20,12 +20,6 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
-      <Extensions>
-        <uap:Extension Category="windows.appService">
-          <uap:AppService Name="NetConsole" />
-        </uap:Extension>
-	      <desktop:Extension Category="windows.fullTrustProcess" Executable="Console\Console.exe" />
-			</Extensions>
     </Application>
   </Applications>
   <Capabilities>

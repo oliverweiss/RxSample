@@ -23,7 +23,7 @@ namespace Console
 		{
 			_connection = new AppServiceConnection
 			{
-				AppServiceName = "NetConsole",
+				AppServiceName = "ExternalConsole",
 				PackageFamilyName = Windows.ApplicationModel.Package.Current.Id.FamilyName
 			};
 			_connection.RequestReceived += Connection_RequestReceived;

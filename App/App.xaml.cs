@@ -29,7 +29,13 @@ namespace App
 	    public static AppServiceConnection Connection = null;
 	    public static event EventHandler AppServiceConnected;
 
-        /// <summary>
+	    public Frame RootFrame
+	    {
+		    get => Window.Current.Content as Frame;
+		    set => Window.Current.Content = value;
+	    }
+
+	    /// <summary>
         /// Initialise l'objet d'application de singleton.  Il s'agit de la première ligne du code créé
         /// à être exécutée. Elle correspond donc à l'équivalent logique de main() ou WinMain().
         /// </summary>
@@ -46,16 +52,14 @@ namespace App
         /// <param name="e">Détails concernant la requête et le processus de lancement.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-
             // Ne répétez pas l'initialisation de l'application lorsque la fenêtre comporte déjà du contenu,
             // assurez-vous juste que la fenêtre est active
-            if (rootFrame == null)
+            if (RootFrame == null)
             {
                 // Créez un Frame utilisable comme contexte de navigation et naviguez jusqu'à la première page
-                rootFrame = new Frame();
+                var frame = new Frame();
 
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                frame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -63,17 +67,17 @@ namespace App
                 }
 
                 // Placez le frame dans la fenêtre active
-                Window.Current.Content = rootFrame;
+	            RootFrame = frame;
             }
 
             if (e.PrelaunchActivated == false)
             {
-                if (rootFrame.Content == null)
+                if (RootFrame.Content == null)
                 {
                     // Quand la pile de navigation n'est pas restaurée, accédez à la première page,
                     // puis configurez la nouvelle page en transmettant les informations requises en tant que
                     // paramètre
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    RootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // Vérifiez que la fenêtre actuelle est active
                 Window.Current.Activate();
@@ -81,14 +85,13 @@ namespace App
 
 	        Services.Clock.PollingTick
 		        .ObserveOn(Services.Dispatcher)
-		        .Subscribe(ChangeTheme);
+		        .Subscribe((_) => ToggleTheme());
         }
 
-	    public void ChangeTheme(long _)
+	    public void ToggleTheme()
 	    {
-		    var topFrame = (Frame) Window.Current.Content;
-		    var isDark = topFrame.RequestedTheme == ElementTheme.Dark;
-		    topFrame.RequestedTheme = isDark ? ElementTheme.Light : ElementTheme.Dark;
+		    var isDark = RootFrame.RequestedTheme == ElementTheme.Dark;
+		    RootFrame.RequestedTheme = isDark ? ElementTheme.Light : ElementTheme.Dark;
 	    }
 
 
