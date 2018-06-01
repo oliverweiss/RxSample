@@ -15,12 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="App.App">
-      <uap:VisualElements DisplayName="App" Square150x150Logo="AppAssets\Square150x150Logo.png" Square44x44Logo="AppAssets\Square44x44Logo.png" Description="App" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="ThouShaltNotBeDeployed" Square150x150Logo="AppAssets\Square150x150Logo.png" Square44x44Logo="AppAssets\Square44x44Logo.png" Description="App" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="AppAssets\Wide310x150Logo.png">
-          <uap:ShowNameOnTiles>
-            <uap:ShowOn Tile="square150x150Logo" />
-            <uap:ShowOn Tile="wide310x150Logo" />
-          </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="AppAssets\SplashScreen.png" />
       </uap:VisualElements>
