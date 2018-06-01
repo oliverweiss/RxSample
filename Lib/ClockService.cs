@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
@@ -14,21 +15,25 @@ namespace Lib
 		
 		public ClockService(IScheduler threadPool)
 		{
-			// TODO Find a way to keep the ticks in sync (expensive solution: polling every 10ms and using DistinctUntilChanged(DateTime.Now.Seconds))
-			var ticks = Observable.Timer(
-					NextSecond(threadPool.Now),
-					TimeSpan.FromSeconds(1),
-					threadPool)
-				.Publish().RefCount(); // Turns it into a Hot observable (starts producing values immediately)
-
-			var now = Observable.Return(0L, threadPool);
+			var ticks = Observable.Generate(Unit.Default,
+				_ => true,
+				_ => Unit.Default,
+				_ => Unit.Default,
+				_ => NextSecond(threadPool.Now),
+				threadPool
+			).Publish().RefCount();
+			
+			var now = Observable.Return(Unit.Default, threadPool);
 
 			Tick = now
 				.Concat(ticks)
 				.Select(_ => new TimeStamp(threadPool.Now));
 
 			PollingTick = now
-				.Concat(ticks.Buffer(PollingInterval).Select(_ => 0L));
+				.Concat(ticks
+					.Buffer(PollingInterval)
+					.Select(_ => Unit.Default))
+				.Select(_ => 0L);
 		}
 
 		/// <summary>
