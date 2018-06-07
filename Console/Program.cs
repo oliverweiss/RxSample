@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
+using Contracts;
 
 namespace Console
 {
@@ -45,13 +46,8 @@ namespace Console
 
         private static async void Connection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
         {
-            var message = args.Request.Message["MESSAGE"] as string;
-	        var foreground = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), args.Request.Message["COLOR"] as string ?? ConsoleColor.White.ToString());
-	        var background = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), args.Request.Message["BACKGROUND"] as string ?? ConsoleColor.Black.ToString());
-
-			ColorConsole.WriteLine(foreground, background, message);
-
-	        await args.Request.SendResponseAsync(new ValueSet {{"RESPONSE", "Success"}});
+            var param = args.Request.Message["GET"] as string;
+	        await args.Request.SendResponseAsync(new ValueSet {{param, StatusEnum.Ok.ToString()}});
         }
 
 

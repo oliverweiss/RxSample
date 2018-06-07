@@ -20,9 +20,7 @@ namespace App
 		public MainPage()
 		{
 			this.InitializeComponent();
-			ViewModel = new MainPageViewModel(Services.Clock, Services.Status, Services.Dispatcher);
-			App.AppServiceConnected += MainPage_AppServiceConnected;
-
+			ViewModel = new MainPageViewModel(Services.Instance.Clock, Services.Instance.Dispatcher, Services.Instance.ThreadPool, Services.Instance.ExternalConsole);
 		}
 
 		public MainPageViewModel ViewModel { get; set; }
@@ -36,25 +34,7 @@ namespace App
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
 		{
 			ViewModel?.OnNavigatedFrom();
-
 			base.OnNavigatedFrom(e);
 		}
-
-
-		private async void MainPage_AppServiceConnected(object sender, EventArgs e)
-		{
-			var message = new ValueSet {{"MESSAGE", "Hello, World!"}, {"COLOR", "Black"}, {"BACKGROUND", "Red"}};
-			// send the ValueSet to the fulltrust process
-			AppServiceResponse response = await App.Connection.SendMessageAsync(message);
-
-			// check the result
-			if (response.Message.TryGetValue("RESPONSE", out var result) && result.ToString() == "Success")
-			{
-				await new MessageDialog(result as string).ShowAsync();
-			}
-			// no longer need the AppService connection
-			App.AppServiceDeferral.Complete();
-		}
-
 	}
 }

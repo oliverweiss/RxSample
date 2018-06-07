@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
+using Contracts;
 
 namespace Lib
 {
@@ -11,7 +12,8 @@ namespace Lib
     {
 	    private readonly ClockService _clock;
 	    private readonly IScheduler _dispatcher;
-	    private readonly StatusService _statusSvc;
+	    private readonly IScheduler _threadPool;
+	    private readonly IExternalConsoleService _console;
 	    
 	    private readonly Stack<IDisposable> _subscriptions = new Stack<IDisposable>();
 
@@ -24,11 +26,12 @@ namespace Lib
 	    public string Error {get => _error; set => Set(ref _error, value); }
 	    public StatusEnum Status {get => _status; set => Set(ref _status, value); }
 		
-		public MainPageViewModel(ClockService clock, StatusService status, IScheduler dispatcher)
+		public MainPageViewModel(ClockService clock, IScheduler dispatcher, IScheduler threadPool, IExternalConsoleService console)
 		{
 			_clock = clock;
-			_statusSvc = status;
 			_dispatcher = dispatcher;
+			_threadPool = threadPool;
+			_console = console;
 		}
 
 		public void Update(TimeStamp timestamp)
@@ -44,9 +47,11 @@ namespace Lib
 			    .ObserveOn(_dispatcher)
 			    .Subscribe(Update));
 
-		    _subscriptions.Push((from tick in _clock.PollingTick
-				    from status in Observable.FromAsync(_statusSvc.GetStatusAsync)
-				    select status)
+		    _subscriptions.Push(_clock.PollingTick
+			    .Where(_ => _console.IsReady)
+			    .Select(_ => Observable.FromAsync(_console.GetStatusAsync, _threadPool))
+			    .Switch()
+			    .DistinctUntilChanged()
 			    .ObserveOn(_dispatcher)
 			    .Subscribe(status => Status = status));
 	    }
