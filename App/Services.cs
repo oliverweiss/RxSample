@@ -2,36 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.AppService;
 using Lib;
 
 namespace App
 {
-	public static class Services
+	public class Services
 	{
-		static Services()
+		public static Services Instance { get; } = new Services();
+
+		private Services()
 		{
 			Dispatcher = new SynchronizationContextScheduler(SynchronizationContext.Current);
-
 			ThreadPool = Scheduler.Default;
-
 			Clock = new ClockService(ThreadPool);
-
-			Status = new StatusService();
-
-			ViewModel = new MainPageViewModel(Clock, Status, Dispatcher);
+			ExternalConsole = new ExternalConsoleService();
+			ViewModel = new MainPageViewModel(Clock, Dispatcher, ThreadPool, ExternalConsole);
 		}
 
-		public static IScheduler Dispatcher { get; }
-
-		public static IScheduler ThreadPool { get; }
-
-		public static ClockService Clock { get; }
-
-		public static StatusService Status { get; }
-
-		public static MainPageViewModel ViewModel { get; }
+		public IExternalConsoleService ExternalConsole { get; }
+		public IScheduler Dispatcher { get; }
+		public IScheduler ThreadPool { get; }
+		public ClockService Clock { get; }
+		public MainPageViewModel ViewModel { get; }
 	}
 }
