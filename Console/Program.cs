@@ -4,6 +4,7 @@ using System.Threading;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
 using Contracts;
+using System.Threading.Tasks;
 
 namespace Console
 {
@@ -47,8 +48,17 @@ namespace Console
         private static async void Connection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
         {
             var param = args.Request.Message["GET"] as string;
-	        await args.Request.SendResponseAsync(new ValueSet {{param, StatusEnum.Ok.ToString()}});
+	        var status = await CalculateStatus(); 
+	        await args.Request.SendResponseAsync(new ValueSet {{param, status.ToString()}});
         }
+
+		private static  Task<StatusEnum> CalculateStatus()
+		{
+			var status = new Random().NextDouble() < 0.5 ? StatusEnum.Fail : StatusEnum.Ok;
+			if (status == StatusEnum.Ok) ColorConsole.WriteLine(ConsoleColor.Gray, ConsoleColor.DarkGreen, status.ToString());
+			else ColorConsole.WriteLine(ConsoleColor.Gray, ConsoleColor.DarkRed, status.ToString());
+			return Task.FromResult(status);
+		}
 
 
 	}
