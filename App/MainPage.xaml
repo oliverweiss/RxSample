@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:contracts="using:Contracts"
+    xmlns:lib="using:Lib"
+    xmlns:controls="using:App.Controls"
     mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 	<Page.Resources>
@@ -15,64 +17,35 @@
 		</Style>
 	</Page.Resources>
 	<Grid>
-		<VisualStateManager.VisualStateGroups>
-			<VisualStateGroup x:Name="AppState">
-				<VisualState x:Name="Ok">
-					<VisualState.StateTriggers>
-						<app:EqualityTrigger Value="{x:Bind ViewModel.Status, Mode=OneWay}">
-							<app:EqualityTrigger.Target>
-								<contracts:StatusEnum>Ok</contracts:StatusEnum>
-							</app:EqualityTrigger.Target>
-						</app:EqualityTrigger>
-					</VisualState.StateTriggers>
-					<VisualState.Setters>
-						<Setter Target="statusPill.Fill">
-							<Setter.Value>
-								<SolidColorBrush Color="Green" />
-							</Setter.Value>
-						</Setter>
-					</VisualState.Setters>
-				</VisualState>
-				<VisualState x:Name="Fail">
-					<VisualState.StateTriggers>
-						<app:EqualityTrigger Value="{x:Bind ViewModel.Status, Mode=OneWay}">
-							<app:EqualityTrigger.Target>
-								<contracts:StatusEnum>Fail</contracts:StatusEnum>
-							</app:EqualityTrigger.Target>
-						</app:EqualityTrigger>
-					</VisualState.StateTriggers>
-					<VisualState.Setters>
-						<Setter Target="statusPill.Fill">
-							<Setter.Value>
-								<SolidColorBrush Color="Red" />
-							</Setter.Value>
-						</Setter>
-					</VisualState.Setters>
-				</VisualState>
-			</VisualStateGroup>
-		</VisualStateManager.VisualStateGroups>
-
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="20">
-			<StackPanel Orientation="Horizontal">
-				<TextBlock Width="240" Text="Date:" />
-				<TextBlock x:Name="Date" Text="{x:Bind ViewModel.Date, Mode=OneWay}" />
-			</StackPanel>
-			<StackPanel Orientation="Horizontal">
-				<TextBlock Width="240" Text="Time: " />
-				<TextBlock x:Name="Time" Text="{x:Bind ViewModel.Time, Mode=OneWay}" />
-			</StackPanel>
-			<StackPanel Orientation="Horizontal">
-				<TextBlock Width="240" Text="Error: " />
-				<TextBlock x:Name="Error" Text="{x:Bind ViewModel.Error, Mode=OneWay}" />
-			</StackPanel>
+			<controls:DataRow x:Uid="Date" Value="{x:Bind ViewModel.Date, Mode=OneWay}" />
+			<controls:DataRow x:Uid="Time" Value="{x:Bind ViewModel.Time, Mode=OneWay}" />
+			<controls:DataRow x:Uid="Error" Value="{x:Bind ViewModel.Error, Mode=OneWay}" />
 		</StackPanel>
 		<Border Grid.Row="1" Background="{ThemeResource AppBarBackgroundThemeBrush}" Height="48">
-			<StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-				<Ellipse x:Name="statusPill" Width="32" Height="32" Margin="4, 0" Fill="Gray" />
+			<StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Margin="8, 0">
+				<controls:StatusPill Status="{x:Bind ViewModel.Status, Mode=OneWay}" Width="32" Height="32" />
+				<!--<Ellipse x:Name="statusPill" Fill="Gray" />-->
+				<AppBarSeparator />
+				<ItemsControl ItemsSource="{x:Bind ViewModel.SupportedLanguages}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<ItemsStackPanel Orientation="Horizontal" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate x:DataType="lib:SupportedLanguage">
+							<Grid VerticalAlignment="Stretch" Margin="0, 4">
+								<Border Visibility="{x:Bind IsCurrent, Mode=OneWay}" Background="{ThemeResource ListBoxItemSelectedDisabledBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+								<HyperlinkButton Content="{x:Bind Tag, Mode=OneWay}" Click="{x:Bind SetAsCurrent}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" VerticalAlignment="Center" Padding="4"/>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
 			</StackPanel>
 		</Border>
 	</Grid>

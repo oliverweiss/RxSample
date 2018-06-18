@@ -96,12 +96,17 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EqualityTrigger.cs" />
+    <Compile Include="Controls\DataRow.xaml.cs">
+      <DependentUpon>DataRow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StatusPill.xaml.cs">
+      <DependentUpon>StatusPill.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExternalConsoleService.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters.cs" />
+    <Compile Include="LocalizationService.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -113,23 +118,37 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="App_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\fr-CH\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="AppAssets\LockScreenLogo.scale-200.png" />
-    <Content Include="AppAssets\SplashScreen.scale-200.png" />
-    <Content Include="AppAssets\Square150x150Logo.scale-200.png" />
-    <Content Include="AppAssets\Square44x44Logo.scale-200.png" />
-    <Content Include="AppAssets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="AppAssets\StoreLogo.png" />
-    <Content Include="AppAssets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\DataRow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StatusPill.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -157,6 +176,7 @@
       <Name>Windows Desktop Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

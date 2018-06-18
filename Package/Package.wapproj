@@ -41,6 +41,24 @@
     <PackageCertificateKeyFile>Package_TemporaryKey.pfx</PackageCertificateKeyFile>
     <EntryPointProjectUniqueName>..\App\App.csproj</EntryPointProjectUniqueName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>

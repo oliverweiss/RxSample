@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
@@ -11,6 +13,7 @@ namespace Lib
 	public class MainPageViewModel : INotifyPropertyChanged
     {
 	    private readonly ClockService _clock;
+	    private readonly ILocalizationService _localization;
 	    private readonly IScheduler _dispatcher;
 	    private readonly IScheduler _threadPool;
 	    private readonly IExternalConsoleService _console;
@@ -25,10 +28,12 @@ namespace Lib
 	    public string Time  {get => _time; set => Set(ref _time, value); }
 	    public string Error {get => _error; set => Set(ref _error, value); }
 	    public StatusEnum Status {get => _status; set => Set(ref _status, value); }
-		
-		public MainPageViewModel(ClockService clock, IScheduler dispatcher, IScheduler threadPool, IExternalConsoleService console)
+	    public ObservableCollection<SupportedLanguage> SupportedLanguages { get; } = new ObservableCollection<SupportedLanguage>();
+
+	    public MainPageViewModel(ClockService clock, ILocalizationService localization, IScheduler dispatcher, IScheduler threadPool, IExternalConsoleService console)
 		{
 			_clock = clock;
+			_localization = localization;
 			_dispatcher = dispatcher;
 			_threadPool = threadPool;
 			_console = console;
@@ -43,21 +48,30 @@ namespace Lib
 
 	    public void OnNavigatedTo()
 	    {
-		    _subscriptions.Push(_clock.Tick
-			    .ObserveOn(_dispatcher)
-			    .Subscribe(Update));
+		    Register(_clock.Tick, Update);
 
-		    _subscriptions.Push(_clock.PollingTick
+		    Register(_clock.PollingTick
 			    .Where(_ => _console.IsReady)
 			    .Select(_ => Observable.FromAsync(_console.GetStatusAsync, _threadPool))
 			    .Switch()
-			    .DistinctUntilChanged()
-			    .ObserveOn(_dispatcher)
-			    .Subscribe(status => Status = status));
+			    .DistinctUntilChanged(),
+			    status => Status = status);
+
+		    var languages = _localization.SupportedLanguages.Select(l =>
+			    new SupportedLanguage(l,
+				    l == _localization.CurrentLanguage,
+				    async () => await _localization.SetLanguageAsync(l)));
+
+		    foreach (var l in languages)
+		    {
+				SupportedLanguages.Add(l);
+		    }
 	    }
 
 	    public void OnNavigatedFrom()
 	    {
+		    SupportedLanguages.Clear();
+
 		    foreach (var subscription in _subscriptions)
 		    {
 			    subscription?.Dispose();
@@ -78,5 +92,31 @@ namespace Lib
 		    OnPropertyChanged(propertyName);
 	    }
 
+	    private void Register<T>(IObservable<T> sequence, Action<T> onNext) => _subscriptions.Push(sequence.ObserveOn(_dispatcher).Subscribe(onNext));
     }
+
+	public class SupportedLanguage
+	{
+		/// <summary>
+		/// BCP-47 language tag
+		/// </summary>
+		public string Tag { get; }
+
+		public bool IsCurrent { get; }
+		public Action OnSetLanguage { get; }
+
+		public SupportedLanguage(string tag, bool isCurrent, Action onSetLanguage)
+		{
+			Tag = tag;
+			IsCurrent = isCurrent;
+			OnSetLanguage = onSetLanguage;
+		}
+
+		public void SetAsCurrent() => OnSetLanguage();
+	}
+
+	public class DataPoint
+	{
+		public string Value { get; set; }
+	}
 }

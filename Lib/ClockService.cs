@@ -57,8 +57,8 @@ namespace Lib
 			_instant = instant.LocalDateTime;
 		}
 
-		public string Time => _instant.ToString("HH:mm:ss");
-		public string Date => _instant.ToString("dd.MM.yyyy");
+		public string Time => _instant.ToLongTimeString();
+		public string Date => _instant.ToShortDateString();
 		public string Error => _instant.ToString("fff");
 	}
 }

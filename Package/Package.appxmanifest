@@ -18,7 +18,9 @@
   </Dependencies>
 
   <Resources>
-    <Resource Language="x-generate"/>
+		<!-- Resources detection doesn't seem to work with Desktop Bridge, so they're hardcoded -->
+    <Resource Language="en-US"/>
+    <Resource Language="fr-CH"/>
   </Resources>
 
   <Applications>

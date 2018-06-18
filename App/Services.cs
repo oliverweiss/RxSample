@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.ServiceModel;
@@ -21,13 +20,15 @@ namespace App
 			ThreadPool = Scheduler.Default;
 			Clock = new ClockService(ThreadPool);
 			ExternalConsole = new ExternalConsoleService();
-			ViewModel = new MainPageViewModel(Clock, Dispatcher, ThreadPool, ExternalConsole);
+			Localization = new LocalizationService();
+			ViewModel = new MainPageViewModel(Clock, Localization, Dispatcher, ThreadPool, ExternalConsole);
 		}
 
 		public IExternalConsoleService ExternalConsole { get; }
 		public IScheduler Dispatcher { get; }
 		public IScheduler ThreadPool { get; }
 		public ClockService Clock { get; }
+		public ILocalizationService Localization { get; }
 		public MainPageViewModel ViewModel { get; }
 	}
 }
