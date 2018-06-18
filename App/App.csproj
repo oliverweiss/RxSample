@@ -163,7 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contracts\Contracts.csproj">
-      <Project>{9C917A42-6A0A-41C0-AC31-E8EA8FBB5F37}</Project>
+      <Project>{9c917a42-6a0a-41c0-ac31-e8ea8fbb5f37}</Project>
       <Name>Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lib\Lib.csproj">
