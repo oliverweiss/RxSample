@@ -1,14 +1,6 @@
-﻿using System;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Lib;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.AppService;
-using Windows.Foundation;
-using Windows.Foundation.Metadata;
-using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -24,10 +16,6 @@ namespace App
 		public MainPage()
 		{
 			this.InitializeComponent();
-
-			ApplicationView.PreferredLaunchViewSize = new Size(640, 480);
-			ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-
 
 			ViewModel = new MainPageViewModel(Services.Instance.Clock, Services.Instance.Localization, Services.Instance.Dispatcher, Services.Instance.ThreadPool, Services.Instance.ExternalConsole);
 		}

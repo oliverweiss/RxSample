@@ -6,7 +6,9 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources.Core;
+using Windows.Foundation;
 using Windows.Globalization;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -36,6 +38,10 @@ namespace App
 		{
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
+			
+			ApplicationView.PreferredLaunchViewSize = new Size(640, 480);
+			ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
 		}
 
 		/// <summary>

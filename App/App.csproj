@@ -96,11 +96,17 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controls\CompositionShadow.xaml.cs">
+      <DependentUpon>CompositionShadow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DataRow.xaml.cs">
       <DependentUpon>DataRow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\StatusPill.xaml.cs">
       <DependentUpon>StatusPill.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WordArt.xaml.cs">
+      <DependentUpon>WordArt.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExternalConsoleService.cs" />
     <Compile Include="App.xaml.cs">
@@ -136,6 +142,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\CompositionShadow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DataRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -144,11 +154,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Controls\WordArt.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\Generic.xaml">
+    <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
