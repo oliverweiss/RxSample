@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
@@ -12,16 +14,36 @@ namespace Console
 	{
 		static AppServiceConnection _connection = null;
 		static AutoResetEvent _appServiceExit;
+		//private static IScheduler _backgroundScheduler;
+		//private static IScheduler _connectionScheduler;
 
 		static void Main(string[] args)
 		{
 			_appServiceExit = new AutoResetEvent(false);
 			InitializeAppServiceConnection();
 
-			IObservable<string> words = new Batman().Fight();
+			StartAFight();
 
 			_appServiceExit.WaitOne();
 			System.Console.ReadLine();
+		}
+
+		private static void StartAFight()
+		{
+			var keyStrokes = Observable
+				.Defer(() => Observable
+					.Start(() => System.Console.ReadKey(true))) // _backgroundScheduler
+				.Repeat()
+				.Publish().RefCount();
+
+			keyStrokes
+				.Zip(new BatmanFight(), (_, word) => word)
+				.Do(word => ColorConsole.WriteLine(ConsoleColor.Red, ConsoleColor.DarkYellow, word))
+				.Select(word => Observable
+					.FromAsync(() => _connection
+						.SendMessageAsync(new ValueSet {{"BATMAN", word}}).AsTask())) // _connectionScheduler
+				.Switch()
+				.Subscribe();
 		}
 
 		static async void InitializeAppServiceConnection()
