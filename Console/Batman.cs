@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 
 namespace Console
 {
@@ -20,7 +21,7 @@ namespace Console
 
 		public IObservable<string> Fight()
 		{
-			throw new NotImplementedException();
+			return Observable.Never<string>();
 		}
 	}
 }

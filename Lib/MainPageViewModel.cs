@@ -24,11 +24,14 @@ namespace Lib
 	    private string _time;
 	    private string _error;
 	    private StatusEnum _status;
+	    private string _word;
 	    public string Date  {get => _date; set => Set(ref _date, value); }
 	    public string Time  {get => _time; set => Set(ref _time, value); }
 	    public string Error {get => _error; set => Set(ref _error, value); }
 	    public StatusEnum Status {get => _status; set => Set(ref _status, value); }
-	    public ObservableCollection<SupportedLanguage> SupportedLanguages { get; } = new ObservableCollection<SupportedLanguage>();
+		public string Word { get => _word; set => Set(ref _word, value); }
+
+		public ObservableCollection<SupportedLanguage> SupportedLanguages { get; } = new ObservableCollection<SupportedLanguage>();
 
 	    public MainPageViewModel(ClockService clock, ILocalizationService localization, IScheduler dispatcher, IScheduler threadPool, IExternalConsoleService console)
 		{
@@ -66,6 +69,8 @@ namespace Lib
 		    {
 				SupportedLanguages.Add(l);
 		    }
+
+		    Word = "WordArt !";
 	    }
 
 	    public void OnNavigatedFrom()

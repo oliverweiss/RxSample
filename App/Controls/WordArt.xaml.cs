@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -19,9 +20,48 @@ namespace App.Controls
 {
 	public sealed partial class WordArt : UserControl
 	{
+		private Random _rand;
+
 		public WordArt()
 		{
 			this.InitializeComponent();
+			_rand = new Random();
 		}
+
+		public string Text
+		{
+			get => (string)GetValue(TextProperty);
+			set => SetValue(TextProperty, value);
+		}
+
+		// Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty TextProperty =
+			DependencyProperty.Register("Text", typeof(string), typeof(WordArt), new PropertyMetadata("", TextChanged));
+
+		private static void TextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			((WordArt)d).OnTextChanged();
+		}
+
+		private void OnTextChanged()
+		{
+			rotation.Angle = _rand.NextDouble(-30.0, 30.0);
+
+			jumpIn.Begin();
+		}
+	}
+
+	public static class RandomExtensions
+	{
+		public static double NextDouble(this Random rnd, double to)
+		{
+			return rnd.NextDouble() * to;
+		}
+
+		public static double NextDouble(this Random rnd, double from, double to)
+		{
+			return from + rnd.NextDouble(to - from);
+		}
+
 	}
 }

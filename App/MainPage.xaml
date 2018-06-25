@@ -30,7 +30,7 @@
 			<controls:DataRow x:Uid="Time" Value="{x:Bind ViewModel.Time, Mode=OneWay}" />
 			<controls:DataRow x:Uid="Error" Value="{x:Bind ViewModel.Error, Mode=OneWay}" />
 		</StackPanel>
-		<controls:WordArt Grid.Row="1" />
+		<controls:WordArt Grid.Row="1" Text="{x:Bind ViewModel.Word, Mode=OneWay}"/>
 		<Border Grid.Row="2" Background="{ThemeResource AppBarBackgroundThemeBrush}" Height="48">
 			<StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Margin="8, 0">
 				<controls:StatusPill Status="{x:Bind ViewModel.Status, Mode=OneWay}" Width="32" Height="32" />

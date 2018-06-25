@@ -9,21 +9,48 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
+	<UserControl.Resources>
+		<Storyboard x:Name="jumpIn">
+			<DoubleAnimation
+				Storyboard.TargetName="scaling"
+				Storyboard.TargetProperty="ScaleX"
+				From="0.1" Duration="0:0:0.2">
+				<DoubleAnimation.EasingFunction>
+					<BounceEase Bounces="2" Bounciness="5" EasingMode="EaseIn" />
+				</DoubleAnimation.EasingFunction>
+			</DoubleAnimation>
+			<DoubleAnimation
+				Storyboard.TargetName="scaling"
+				Storyboard.TargetProperty="ScaleY"
+				From="0.1" Duration="0:0:0.2">
+				<DoubleAnimation.EasingFunction>
+					<BounceEase Bounces="2" Bounciness="5"  EasingMode="EaseIn"/>
+				</DoubleAnimation.EasingFunction>
+			</DoubleAnimation>
+			<DoubleAnimation Storyboard.TargetName="rotation"
+			                 Storyboard.TargetProperty="Angle"
+			                 From="-360"
+			                 Duration="0:0:0.2"/>
+		</Storyboard>
+	</UserControl.Resources>
+	<Grid RenderTransformOrigin="0.5, 0.5">
+		<Grid.RenderTransform>
+			<TransformGroup>
+				<ScaleTransform x:Name="scaling" ScaleX="1.5" ScaleY="1.5" />
+				<RotateTransform x:Name="rotation" />
+			</TransformGroup>
 
-	<Grid>
+		</Grid.RenderTransform>
 		<Grid.Transform3D>
-			<media3D:PerspectiveTransform3D />
-		</Grid.Transform3D>
-		<local:CompositionShadow BlurRadius="4" Color="Green" OffsetX="4" OffsetY="4" OffsetZ="10" ShadowOpacity="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<local:CompositionShadow.Transform3D>
-				<media3D:CompositeTransform3D TranslateX="40"  TranslateY="15" RotationY="60" TranslateZ="500" RotationZ="15" />
-			</local:CompositionShadow.Transform3D>
-			<local:CompositionShadow.CastingElement>
-				<TextBlock Text="WordArt!" FontFamily="Comic Sans MS" FontSize="48" FontWeight="Bold"/>
-			</local:CompositionShadow.CastingElement>
-		</local:CompositionShadow>
-	</Grid>
-
+				<media3D:PerspectiveTransform3D />
+			</Grid.Transform3D>
+		<local:CompositionShadow x:Name="shadow" BlurRadius="4" OffsetX="4" OffsetY="4" OffsetZ="10" ShadowOpacity="1" HorizontalAlignment="Center" VerticalAlignment="Center" Color="#DFDF00">
+				<local:CompositionShadow.Transform3D>
+					<media3D:CompositeTransform3D RotationY="45"/>
+				</local:CompositionShadow.Transform3D>
+				<TextBlock Text="{x:Bind Text, Mode=OneWay}" FontFamily="Comic Sans MS" FontSize="48" FontWeight="Bold" />
+			</local:CompositionShadow>
+		</Grid>
 </UserControl>
 
 
