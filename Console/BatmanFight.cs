@@ -40,13 +40,21 @@ namespace Console
 				ChangeValue();
 			}
 
-			private void ChangeValue() => _current = _rand.Next(Words.Length);
+			private void ChangeValue()
+			{
+				_current = _rand.Next(Words.Length);
+				ColorConsole.Write(ConsoleColor.White, ConsoleColor.DarkMagenta, Environment.NewLine+Current);
+			}
 
 			public bool MoveNext()
 			{
 				if (_rand.NextDouble() < _mutability)
 				{
 					ChangeValue();
+				}
+				else
+				{
+					ColorConsole.Write(ConsoleColor.White, ConsoleColor.DarkYellow, " "+Current);
 				}
 
 				return true;

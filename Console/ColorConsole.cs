@@ -24,7 +24,18 @@ namespace Console
 		{
 			using (new ColorConsole(foregroundColor, backgroundColor)) { System.Console.WriteLine(text); }
 		}
-		
+
+		public static void Write(ConsoleColor foregroundColor, string text)
+		{
+			using (new ColorConsole(foregroundColor)) { System.Console.Write(text); }
+		}
+
+		public static void Write(ConsoleColor foregroundColor,ConsoleColor backgroundColor, string text)
+		{
+			using (new ColorConsole(foregroundColor, backgroundColor)) { System.Console.Write(text); }
+		}
+
+
 		public void Dispose()
 		{
 			System.Console.ForegroundColor = _initialForegroundColor;

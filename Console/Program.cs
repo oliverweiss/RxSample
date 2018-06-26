@@ -14,8 +14,8 @@ namespace Console
 	{
 		static AppServiceConnection _connection = null;
 		static AutoResetEvent _appServiceExit;
-		//private static IScheduler _backgroundScheduler;
-		//private static IScheduler _connectionScheduler;
+		private static readonly IScheduler _backgroundScheduler = Scheduler.Default;
+		private static readonly IScheduler _connectionScheduler = Scheduler.Default;
 
 		static void Main(string[] args)
 		{
@@ -32,16 +32,21 @@ namespace Console
 		{
 			var keyStrokes = Observable
 				.Defer(() => Observable
-					.Start(() => System.Console.ReadKey(true))) // _backgroundScheduler
+					.Start(() => System.Console.ReadKey(true), _backgroundScheduler))
 				.Repeat()
 				.Publish().RefCount();
 
-			keyStrokes
+			var words = keyStrokes
 				.Zip(new BatmanFight(), (_, word) => word)
-				.Do(word => ColorConsole.WriteLine(ConsoleColor.Red, ConsoleColor.DarkYellow, word))
+				.Publish().RefCount();
+
+			var filteredWords = words.DistinctUntilChanged(TimeSpan.FromSeconds(1), _backgroundScheduler);
+			
+			filteredWords
+				.Do(word => ColorConsole.Write(ConsoleColor.White, ConsoleColor.DarkGreen, $" *{word}*"))
 				.Select(word => Observable
 					.FromAsync(() => _connection
-						.SendMessageAsync(new ValueSet {{"BATMAN", word}}).AsTask())) // _connectionScheduler
+						.SendMessageAsync(new ValueSet {{"BATMAN", word}}).AsTask(), _connectionScheduler)) 
 				.Switch()
 				.Subscribe();
 		}
@@ -83,7 +88,17 @@ namespace Console
 			ColorConsole.WriteLine(ConsoleColor.Gray, backgroundColor, status.ToString());
 			return status;
 		}
+	}
 
-
+	public static class ObservableExtensions
+	{
+		public static IObservable<T> DistinctUntilChanged<T>(this IObservable<T> source, TimeSpan timeout,
+			IScheduler scheduler)
+		{
+			return source
+				.Window(() => source.DistinctUntilChanged().Skip(1).Merge(source.Throttle(timeout, scheduler)))
+				.Select(w => w.Take(1))
+				.Switch();
+		}
 	}
 }
