@@ -8,7 +8,6 @@ using Windows.Foundation.Collections;
 using Windows.UI;
 using Contracts;
 using Lib;
-using ObservableExtensions = Lib.ObservableExtensions;
 using System.Reactive.Linq;
 using Windows.Foundation;
 

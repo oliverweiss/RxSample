@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
 using Contracts;
-using System.Threading.Tasks;
+using Shared;
 
 namespace Console
 {
@@ -85,20 +84,6 @@ namespace Console
 			var backgroundColor = status == StatusEnum.Ok ? ConsoleColor.DarkGreen : ConsoleColor.DarkRed;
 			ColorConsole.WriteLine(ConsoleColor.Gray, backgroundColor, status.ToString());
 			return status;
-		}
-	}
-
-	public static class ObservableExtensions
-	{
-		public static IObservable<T> DistinctUntilChanged<T>(this IObservable<T> source, TimeSpan timeout,
-			IScheduler scheduler)
-		{
-			var published = source.Publish().RefCount();
-
-			return published
-				.Window(() => published.DistinctUntilChanged().Skip(1).Merge(published.Throttle(timeout, scheduler)))
-				.Select(w => w.Take(1))
-				.Switch();
 		}
 	}
 }
