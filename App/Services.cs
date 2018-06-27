@@ -19,7 +19,7 @@ namespace App
 			Dispatcher = new SynchronizationContextScheduler(SynchronizationContext.Current);
 			ThreadPool = Scheduler.Default;
 			Clock = new ClockService(ThreadPool);
-			ExternalConsole = new ExternalConsoleService();
+			ExternalConsole = new ExternalConsoleService(Clock);
 			Localization = new LocalizationService();
 			ViewModel = new MainPageViewModel(Clock, Localization, Dispatcher, ThreadPool, ExternalConsole);
 		}

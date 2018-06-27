@@ -30,7 +30,8 @@
 			<DoubleAnimation Storyboard.TargetName="rotation"
 			                 Storyboard.TargetProperty="Angle"
 			                 From="-360"
-			                 Duration="0:0:0.2"/>
+			                 To="{x:Bind Angle, Mode=OneWay}"
+							 Duration="0:0:0.2"/>
 		</Storyboard>
 	</UserControl.Resources>
 	<Grid RenderTransformOrigin="0.5, 0.5">

@@ -29,6 +29,7 @@ namespace Console
 
 		internal class Enumerator : IEnumerator<string>
 		{
+			private readonly string _id = Guid.NewGuid().ToString().Substring(0, 6);
 			private readonly double _mutability;
 			private readonly Random _rand;
 			private int _current;
@@ -43,7 +44,7 @@ namespace Console
 			private void ChangeValue()
 			{
 				_current = _rand.Next(Words.Length);
-				ColorConsole.Write(ConsoleColor.White, ConsoleColor.DarkMagenta, Environment.NewLine+Current);
+				ColorConsole.Write(ConsoleColor.Gray, $" -> {Current}");
 			}
 
 			public bool MoveNext()
@@ -51,10 +52,6 @@ namespace Console
 				if (_rand.NextDouble() < _mutability)
 				{
 					ChangeValue();
-				}
-				else
-				{
-					ColorConsole.Write(ConsoleColor.White, ConsoleColor.DarkYellow, " "+Current);
 				}
 
 				return true;

@@ -10,5 +10,6 @@ namespace Lib
 	{
 		bool IsReady { get; }
 		Task<StatusEnum> GetStatusAsync();
+		IObservable<string> FightingWords { get; }
 	}
 }

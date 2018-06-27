@@ -38,6 +38,19 @@ namespace App.Controls
 		public static readonly DependencyProperty TextProperty =
 			DependencyProperty.Register("Text", typeof(string), typeof(WordArt), new PropertyMetadata("", TextChanged));
 
+
+
+
+		public double Angle
+		{
+			get { return (double)GetValue(AngleProperty); }
+			set { SetValue(AngleProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for Angle.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty AngleProperty =
+			DependencyProperty.Register("Angle", typeof(double), typeof(WordArt), new PropertyMetadata(0.0));
+
 		private static void TextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			((WordArt)d).OnTextChanged();
@@ -45,7 +58,7 @@ namespace App.Controls
 
 		private void OnTextChanged()
 		{
-			rotation.Angle = _rand.NextDouble(-30.0, 30.0);
+			Angle = _rand.NextDouble(-30.0, 30.0);
 
 			jumpIn.Begin();
 		}

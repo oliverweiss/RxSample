@@ -38,11 +38,9 @@ namespace Console
 
 			var words = keyStrokes
 				.Zip(new BatmanFight(), (_, word) => word)
-				.Publish().RefCount();
-
-			var filteredWords = words.DistinctUntilChanged(TimeSpan.FromSeconds(1), _backgroundScheduler);
+				.DistinctUntilChanged(TimeSpan.FromSeconds(1), _backgroundScheduler);
 			
-			filteredWords
+			words
 				.Do(word => ColorConsole.Write(ConsoleColor.White, ConsoleColor.DarkGreen, $" *{word}*"))
 				.Select(word => Observable
 					.FromAsync(() => _connection
@@ -95,8 +93,10 @@ namespace Console
 		public static IObservable<T> DistinctUntilChanged<T>(this IObservable<T> source, TimeSpan timeout,
 			IScheduler scheduler)
 		{
-			return source
-				.Window(() => source.DistinctUntilChanged().Skip(1).Merge(source.Throttle(timeout, scheduler)))
+			var published = source.Publish().RefCount();
+
+			return published
+				.Window(() => published.DistinctUntilChanged().Skip(1).Merge(published.Throttle(timeout, scheduler)))
 				.Select(w => w.Take(1))
 				.Switch();
 		}

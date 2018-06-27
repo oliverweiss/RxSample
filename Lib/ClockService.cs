@@ -12,7 +12,17 @@ namespace Lib
 		public IObservable<TimeStamp> Tick { get; }
 		public IObservable<long> PollingTick { get; set; }
 
+		public IObservable<T> DeferUntil<T>(Func<bool> predicate, Func<IObservable<T>> factory)
+		{
+			return Tick
+				.Where(_ => predicate()).Take(1)
+				.IgnoreElements().Cast<T>()
+				.Concat(Observable.Defer(factory));
+		}
+
 		public static readonly int PollingInterval = 10;
+
+
 		
 		public ClockService(IScheduler threadPool)
 		{

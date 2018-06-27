@@ -60,6 +60,8 @@ namespace Lib
 			    .DistinctUntilChanged(),
 			    status => Status = status);
 
+			Register(_console.FightingWords, word => Word = word);
+
 		    var languages = _localization.SupportedLanguages.Select(l =>
 			    new SupportedLanguage(l,
 				    l == _localization.CurrentLanguage,
@@ -70,7 +72,7 @@ namespace Lib
 				SupportedLanguages.Add(l);
 		    }
 
-		    Word = "WordArt !";
+		    Word = "Na-na-na-na Na-na-na-na\r\nNa-na-na-na Na-na-na-na";
 	    }
 
 	    public void OnNavigatedFrom()
@@ -118,10 +120,5 @@ namespace Lib
 		}
 
 		public void SetAsCurrent() => OnSetLanguage();
-	}
-
-	public class DataPoint
-	{
-		public string Value { get; set; }
 	}
 }
